@@ -50,6 +50,11 @@ public class Trace {
         end = ac.get_endTime().after(end) ? ac.get_endTime() : end;
     }
 
+    public boolean set_ActivitySet(HashSet<String> Activity_set) {
+        this.Activity_set = (HashSet<String>) Activity_set.clone();
+        return !Activity_set.isEmpty();
+    }
+
     public String get_ID() {
         return this.ID;
     }
@@ -58,9 +63,8 @@ public class Trace {
         return this.activities;
     }
 
-    public boolean set_ActivitySet(HashSet<String> Activity_set) {
-        this.Activity_set = (HashSet<String>) Activity_set.clone();
-        return true;
+    public HashSet<String> get_Activity_set() {
+        return this.Activity_set;
     }
 
     public Date get_start() {
