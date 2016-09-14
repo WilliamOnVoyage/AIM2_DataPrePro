@@ -88,4 +88,8 @@ public class ReadFile {
         }
         return isSuccess;
     }
+
+    public List<Trace> get_Traces() {
+        return this.traces;
+    }
 }

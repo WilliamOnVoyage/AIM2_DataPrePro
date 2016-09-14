@@ -5,12 +5,24 @@
  */
 package DataPreProcess;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Moliang
  */
 public class DataConvert {
-    public DataConvert(){
+
+    private static List<ConvertedTrace> ConvertedTraces;
+
+    public static List<ConvertedTrace> Convert(List<Trace> traces) {
+        ConvertedTraces = new ArrayList<>();
+        for (Trace t : traces) {
+            ConvertedTrace ct = new ConvertedTrace(t);
+            ConvertedTraces.add(ct);
+        }
+        return ConvertedTraces;
     }
 
 }

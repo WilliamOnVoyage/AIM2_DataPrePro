@@ -20,7 +20,7 @@ public class Activity {
     private Date start;
     private Date end;
     private String note;
-    private final DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss"); //Time format
+    private final DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss"); //Time format
 
     public Activity(String activity_name, String start, String end, String note) throws ParseException {
         this.activity_name = activity_name;

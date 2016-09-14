@@ -33,7 +33,7 @@ public class ConvertedTrace {
         this.activities = (ArrayList<Activity>) t.get_ActivityList().clone();
         this.start = t.get_start();
         this.end = t.get_end();
-        scale = (int) (end.getTime() - start.getTime()) / 1000; //scale in 1s
+        scale = (int) (end.getTime() - start.getTime()) / 1000 / Length; //scale in 1s
         this.Activity_set = t.get_Activity_set();
         Matrix = new int[Activity_set.size()][Length];
         construct_Matrix();
@@ -42,8 +42,17 @@ public class ConvertedTrace {
     private void construct_Matrix() {
         for (Activity ac : activities) {
             //Check the range by start and end
+            int start_index = (int) (ac.get_startTime().getTime() - this.start.getTime()) / 1000 / scale;
+            int end_index = (int) (ac.get_endTime().getTime() - this.start.getTime()) / 1000 / scale;
             //Set corresponding cells to 1
+            int row_index = Activity_set.get(ac.get_name());
+            for (int i = start_index; i <= end_index; i++) {
+                Matrix[row_index][i] = 1;
+            }
         }
     }
 
+    public int[][] get_Matrix() {
+        return this.Matrix;
+    }
 }

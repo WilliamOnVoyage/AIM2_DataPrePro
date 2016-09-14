@@ -5,10 +5,13 @@
  */
 package GUI;
 
+import DataPreProcess.ConvertedTrace;
+import DataPreProcess.DataConvert;
+import DataPreProcess.Trace;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.List;
 import javax.swing.JFileChooser;
 
 /**
@@ -16,6 +19,9 @@ import javax.swing.JFileChooser;
  * @author Moliang
  */
 public class Main_Frame extends javax.swing.JFrame {
+
+    private List<Trace> traces;
+    private List<ConvertedTrace> converted_traces;
 
     /**
      * Creates new form Main_Frame
@@ -95,11 +101,14 @@ public class Main_Frame extends javax.swing.JFrame {
             System.out.println(address);
             ReadFile file = new ReadFile();
             file.readCsvFile(address);
+            traces = file.get_Traces();
         }
     }//GEN-LAST:event_jMenuItem_OpenFileActionPerformed
 
     private void jButton_ConvertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConvertActionPerformed
         // TODO add your handling code here:
+        System.out.println("Converting traces... ");
+        converted_traces = DataConvert.Convert(traces);
         int response = jFileChooser_Open.showOpenDialog(this);
         if (response == JFileChooser.APPROVE_OPTION) {
             // Read csv train_file_name here
@@ -130,12 +139,11 @@ public class Main_Frame extends javax.swing.JFrame {
 //                }
 //                strBd.append("\n");
 //            }
-
             myWriter.write(strBd.toString());
             myWriter.close();
-            
+
         } catch (IOException ex) {
-            
+
         }
     }
 
