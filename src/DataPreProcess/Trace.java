@@ -6,7 +6,10 @@
 package DataPreProcess;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *
@@ -15,10 +18,12 @@ import java.util.HashMap;
 public class Trace {
 
     private String ID;
-    private int scale;
-    
+    private Date start;
+    private Date end;
+
     private ArrayList<Activity> activities;
     private HashMap<String, Integer[]> phase;
+    private HashSet<String> Activity_set;
 
     public Trace(String ID) {
         this.ID = ID;
@@ -28,5 +33,41 @@ public class Trace {
 
     public void add_activity(Activity ac) {
         activities.add(ac);
+        if (activities.size() == 1) {
+            initial_time(ac);
+        } else {
+            update_time(ac);
+        }
+    }
+
+    private void initial_time(Activity ac) {
+        start = ac.get_startTime();
+        end = ac.get_endTime();
+    }
+
+    private void update_time(Activity ac) {
+        start = ac.get_startTime().before(start) ? ac.get_startTime() : start;
+        end = ac.get_endTime().after(end) ? ac.get_endTime() : end;
+    }
+
+    public String get_ID() {
+        return this.ID;
+    }
+
+    public ArrayList<Activity> get_ActivityList() {
+        return this.activities;
+    }
+
+    public boolean set_ActivitySet(HashSet<String> Activity_set) {
+        this.Activity_set = (HashSet<String>) Activity_set.clone();
+        return true;
+    }
+
+    public Date get_start() {
+        return this.start;
+    }
+
+    public Date get_end() {
+        return this.end;
     }
 }

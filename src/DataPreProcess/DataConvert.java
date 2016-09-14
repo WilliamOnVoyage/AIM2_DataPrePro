@@ -10,5 +10,7 @@ package DataPreProcess;
  * @author Moliang
  */
 public class DataConvert {
-    
+    public DataConvert(){
+    }
+
 }

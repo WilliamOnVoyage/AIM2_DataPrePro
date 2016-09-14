@@ -65,9 +65,11 @@ public class ReadFile {
                     t = new Trace(ID);
                     ID_set.add(ID);
                 }
-                Activity_set.add(record.get(Activity));
                 Activity ac = new Activity(record.get(Activity), record.get(StartTime), record.get(CompleteTime), record.get(Timestamp));
                 t.add_activity(ac);
+                
+                Activity_set.add(record.get(Activity));
+
             }
         } catch (Exception e) {
             System.out.println("Error in CsvFileReader !!!");

@@ -5,6 +5,10 @@
  */
 package GUI;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Vector;
 import javax.swing.JFileChooser;
 
 /**
@@ -39,6 +43,11 @@ public class Main_Frame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton_Convert.setText("Convert");
+        jButton_Convert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ConvertActionPerformed(evt);
+            }
+        });
 
         jMenu_File.setText("File");
 
@@ -88,6 +97,47 @@ public class Main_Frame extends javax.swing.JFrame {
             file.readCsvFile(address);
         }
     }//GEN-LAST:event_jMenuItem_OpenFileActionPerformed
+
+    private void jButton_ConvertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConvertActionPerformed
+        // TODO add your handling code here:
+        int response = jFileChooser_Open.showOpenDialog(this);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            // Read csv train_file_name here
+            String output_file = jFileChooser_Open.getSelectedFile().getAbsolutePath();
+            if (!output_file.contains(".csv")) {
+                output_file = output_file + ".csv";
+            }
+            System.out.println("Writing file: " + output_file);
+            Export_file(output_file);
+        }
+    }//GEN-LAST:event_jButton_ConvertActionPerformed
+
+    private void Export_file(String filename) {
+        FileWriter myWriter = null;
+        try {
+            File myFile = new File(filename);
+            myWriter = new FileWriter(myFile, false); // true to append,false to overwrite
+            StringBuilder strBd = new StringBuilder();
+
+            String title = "";
+
+//            for (Vector<String> line : Result_table) {
+//                for (int index = 0; index < line.size(); index++) {
+//                    strBd.append(line.get(index));
+//                    if (index != line.size() - 1) {
+//                        strBd.append(',');
+//                    }
+//                }
+//                strBd.append("\n");
+//            }
+
+            myWriter.write(strBd.toString());
+            myWriter.close();
+            
+        } catch (IOException ex) {
+            
+        }
+    }
 
     /**
      * @param args the command line arguments
