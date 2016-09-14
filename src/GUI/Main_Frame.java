@@ -5,6 +5,8 @@
  */
 package GUI;
 
+import javax.swing.JFileChooser;
+
 /**
  *
  * @author Moliang
@@ -27,13 +29,27 @@ public class Main_Frame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFileChooser_Open = new javax.swing.JFileChooser();
+        jButton_Convert = new javax.swing.JButton();
         jMenuBar = new javax.swing.JMenuBar();
         jMenu_File = new javax.swing.JMenu();
+        jMenuItem_OpenFile = new javax.swing.JMenuItem();
         jMenu_Edit = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jButton_Convert.setText("Convert");
+
         jMenu_File.setText("File");
+
+        jMenuItem_OpenFile.setText("Open file");
+        jMenuItem_OpenFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_OpenFileActionPerformed(evt);
+            }
+        });
+        jMenu_File.add(jMenuItem_OpenFile);
+
         jMenuBar.add(jMenu_File);
 
         jMenu_Edit.setText("Edit");
@@ -45,15 +61,33 @@ public class Main_Frame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(139, 139, 139)
+                .addComponent(jButton_Convert)
+                .addContainerGap(190, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(137, Short.MAX_VALUE)
+                .addComponent(jButton_Convert)
+                .addGap(119, 119, 119))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItem_OpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_OpenFileActionPerformed
+        // TODO add your handling code here:
+        int response = jFileChooser_Open.showOpenDialog(this);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            // Read csv file here
+            String address = jFileChooser_Open.getSelectedFile().getAbsolutePath();
+            System.out.println(address);
+            ReadFile file = new ReadFile();
+            file.readCsvFile(address);
+        }
+    }//GEN-LAST:event_jMenuItem_OpenFileActionPerformed
 
     /**
      * @param args the command line arguments
@@ -91,7 +125,10 @@ public class Main_Frame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton_Convert;
+    private javax.swing.JFileChooser jFileChooser_Open;
     private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenuItem jMenuItem_OpenFile;
     private javax.swing.JMenu jMenu_Edit;
     private javax.swing.JMenu jMenu_File;
     // End of variables declaration//GEN-END:variables
