@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import org.apache.commons.csv.CSVFormat;
@@ -41,7 +42,7 @@ public class ReadFile {
         CSVFormat csvFileFormat = CSVFormat.DEFAULT.withHeader(FILE_HEADER_MAPPING);
 
         try {
-            HashSet<String> Activity_set = new HashSet<String>();
+            HashMap<String, Integer> Activity_set = new HashMap<String, Integer>();
             HashSet<String> ID_set = new HashSet<String>();
             traces = new ArrayList<Trace>();
             //initialize FileReader object
@@ -67,8 +68,8 @@ public class ReadFile {
                 }
                 Activity ac = new Activity(record.get(Activity), record.get(StartTime), record.get(CompleteTime), record.get(Timestamp));
                 t.add_activity(ac);
-                
-                Activity_set.add(record.get(Activity));
+                t.set_ActivitySet(Activity_set);
+                Activity_set.put(record.get(Activity), i - 1);
 
             }
         } catch (Exception e) {

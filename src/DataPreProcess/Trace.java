@@ -23,7 +23,7 @@ public class Trace {
 
     private ArrayList<Activity> activities;
     private HashMap<String, Integer[]> phase;
-    private HashSet<String> Activity_set;
+    private HashMap<String, Integer> Activity_set;
 
     public Trace(String ID) {
         this.ID = ID;
@@ -50,8 +50,8 @@ public class Trace {
         end = ac.get_endTime().after(end) ? ac.get_endTime() : end;
     }
 
-    public boolean set_ActivitySet(HashSet<String> Activity_set) {
-        this.Activity_set = (HashSet<String>) Activity_set.clone();
+    public boolean set_ActivitySet(HashMap<String, Integer> Activity_set) {
+        this.Activity_set = Activity_set;
         return !Activity_set.isEmpty();
     }
 
@@ -63,7 +63,7 @@ public class Trace {
         return this.activities;
     }
 
-    public HashSet<String> get_Activity_set() {
+    public HashMap<String, Integer> get_Activity_set() {
         return this.Activity_set;
     }
 
