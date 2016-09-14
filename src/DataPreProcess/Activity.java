@@ -5,6 +5,11 @@
  */
 package DataPreProcess;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  *
  * @author Moliang
@@ -12,14 +17,15 @@ package DataPreProcess;
 public class Activity {
 
     private String activity_name;
-    private long start;
-    private long end;
+    private Date start;
+    private Date end;
     private String note;
+    private final DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
 
-    public Activity(String activity_name, String start, String end, String note) {
+    public Activity(String activity_name, String start, String end, String note) throws ParseException {
         this.activity_name = activity_name;
-        this.start = Long.parseLong(start);
-        this.end = Long.parseLong(end);
+        this.start = timeFormat.parse(start);
+        this.end = timeFormat.parse(end);
         this.note = note;
     }
 
@@ -28,11 +34,11 @@ public class Activity {
         return this.activity_name;
     }
 
-    public long get_startTime() {
+    public Date get_startTime() {
         return this.start;
     }
 
-    public long get_endTime() {
+    public Date get_endTime() {
         return this.end;
     }
 }
