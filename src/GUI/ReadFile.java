@@ -54,6 +54,7 @@ public class ReadFile {
             //Get a list of CSV file records
             List<CSVRecord> csvRecords = csvFileParser.getRecords();
             Trace t = new Trace("");
+            int activity_index = 0;
             //Read the CSV file records starting from the second record to skip the header
             for (int i = 1; i < csvRecords.size(); i++) {
                 CSVRecord record = csvRecords.get(i);
@@ -63,14 +64,20 @@ public class ReadFile {
                     if (i != 1) {
                         traces.add(t);
                     }
+
                     t = new Trace(ID);
                     ID_set.add(ID);
                 }
                 Activity ac = new Activity(record.get(Activity), record.get(StartTime), record.get(CompleteTime), record.get(Timestamp));
                 t.add_activity(ac);
-                t.set_ActivitySet(Activity_set);
-                Activity_set.put(record.get(Activity), i - 1);
 
+                if (!Activity_set.containsKey(record.get(Activity))) {
+                    Activity_set.put(record.get(Activity), activity_index);
+                    activity_index++;
+                }
+            }
+            for (Trace t_ : traces) {
+                t_.set_ActivitySet((HashMap<String, Integer>) Activity_set.clone());
             }
         } catch (Exception e) {
             System.out.println("Error in CsvFileReader !!!");

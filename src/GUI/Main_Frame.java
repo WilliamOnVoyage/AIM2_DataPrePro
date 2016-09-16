@@ -8,6 +8,7 @@ package GUI;
 import DataPreProcess.ConvertedTrace;
 import DataPreProcess.DataConvert;
 import DataPreProcess.Trace;
+import Phasing.Phasing_summer;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -41,6 +42,7 @@ public class Main_Frame extends javax.swing.JFrame {
 
         jFileChooser_Open = new javax.swing.JFileChooser();
         jButton_Convert = new javax.swing.JButton();
+        jButton_SummerPhase = new javax.swing.JButton();
         jMenuBar = new javax.swing.JMenuBar();
         jMenu_File = new javax.swing.JMenu();
         jMenuItem_OpenFile = new javax.swing.JMenuItem();
@@ -52,6 +54,13 @@ public class Main_Frame extends javax.swing.JFrame {
         jButton_Convert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_ConvertActionPerformed(evt);
+            }
+        });
+
+        jButton_SummerPhase.setText("Summer Phase");
+        jButton_SummerPhase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_SummerPhaseActionPerformed(evt);
             }
         });
 
@@ -77,16 +86,20 @@ public class Main_Frame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(139, 139, 139)
+                .addContainerGap()
                 .addComponent(jButton_Convert)
-                .addContainerGap(190, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 206, Short.MAX_VALUE)
+                .addComponent(jButton_SummerPhase)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(137, Short.MAX_VALUE)
-                .addComponent(jButton_Convert)
-                .addGap(119, 119, 119))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton_Convert)
+                    .addComponent(jButton_SummerPhase))
+                .addContainerGap(245, Short.MAX_VALUE))
         );
 
         pack();
@@ -108,7 +121,9 @@ public class Main_Frame extends javax.swing.JFrame {
     private void jButton_ConvertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConvertActionPerformed
         // TODO add your handling code here:
         System.out.println("Converting traces... ");
+
         converted_traces = DataConvert.Convert(traces);
+
         int response = jFileChooser_Open.showOpenDialog(this);
         if (response == JFileChooser.APPROVE_OPTION) {
             // Read csv train_file_name here
@@ -121,6 +136,15 @@ public class Main_Frame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_ConvertActionPerformed
 
+    private void jButton_SummerPhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SummerPhaseActionPerformed
+        // TODO add your handling code here:
+        //Divide summer phases
+        for (ConvertedTrace ct : converted_traces) {
+            String[] phase = Phasing_summer.Divide_Phase_Summer(ct);
+            ct.set_phase(phase);
+        }
+    }//GEN-LAST:event_jButton_SummerPhaseActionPerformed
+
     private void Export_file(String filename) {
         FileWriter myWriter = null;
         try {
@@ -128,17 +152,36 @@ public class Main_Frame extends javax.swing.JFrame {
             myWriter = new FileWriter(myFile, false); // true to append,false to overwrite
             StringBuilder strBd = new StringBuilder();
 
-            String title = "";
+            for (ConvertedTrace ct : converted_traces) {
+                strBd.append("ID,");
+                strBd.append(ct.get_ID());
+                strBd.append("\n");
+                strBd.append("Scale,");
+                strBd.append(ct.get_scale());
+                strBd.append("\n");
+                strBd.append("Activity\n");
 
-//            for (Vector<String> line : Result_table) {
-//                for (int index = 0; index < line.size(); index++) {
-//                    strBd.append(line.get(index));
-//                    if (index != line.size() - 1) {
-//                        strBd.append(',');
-//                    }
-//                }
-//                strBd.append("\n");
-//            }
+                int[][] matrix = ct.get_Matrix().clone();
+                for (String ac : ct.get_Activity_set().keySet()) {
+                    strBd.append(ac);
+                    for (int cell : matrix[ct.get_Activity_set().get(ac)]) {
+                        strBd.append(",");
+                        strBd.append(cell);
+                    }
+                    strBd.append("\n");
+                }
+                strBd.append("Phase");
+                //Output phase here
+                String[] phase = ct.get_phase();
+                if (phase.length > 0) {
+                    for (String i : phase) {
+                        strBd.append(",");
+                        strBd.append(i);
+                    }
+                }
+                strBd.append("\n");
+            }
+
             myWriter.write(strBd.toString());
             myWriter.close();
 
@@ -184,6 +227,7 @@ public class Main_Frame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Convert;
+    private javax.swing.JButton jButton_SummerPhase;
     private javax.swing.JFileChooser jFileChooser_Open;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenuItem jMenuItem_OpenFile;

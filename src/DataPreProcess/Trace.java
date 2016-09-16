@@ -6,10 +6,8 @@
 package DataPreProcess;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  *
@@ -22,12 +20,11 @@ public class Trace {
     private Date end;
 
     private ArrayList<Activity> activities;
-    private HashMap<String, Integer[]> phase;
+    private String[] phase;
     private HashMap<String, Integer> Activity_set;
 
     public Trace(String ID) {
         this.ID = ID;
-        phase = new HashMap<>();
         activities = new ArrayList<>();
     }
 
@@ -74,4 +71,5 @@ public class Trace {
     public Date get_end() {
         return this.end;
     }
+    
 }

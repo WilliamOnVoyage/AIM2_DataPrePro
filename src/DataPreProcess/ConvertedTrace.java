@@ -8,7 +8,6 @@ package DataPreProcess;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  *
@@ -22,7 +21,7 @@ public class ConvertedTrace {
     private int scale = 1;
 
     private ArrayList<Activity> activities;
-    private HashMap<String, Integer[]> phase;
+    private String[] phase;
     private HashMap<String, Integer> Activity_set;
 
     private int[][] Matrix;
@@ -33,9 +32,10 @@ public class ConvertedTrace {
         this.activities = (ArrayList<Activity>) t.get_ActivityList().clone();
         this.start = t.get_start();
         this.end = t.get_end();
-        scale = (int) (end.getTime() - start.getTime()) / 1000 / Length; //scale in 1s
-        this.Activity_set = t.get_Activity_set();
+        scale = (int) (end.getTime() - start.getTime()) / 1000 / Length + 1; //scale in 1s
+        this.Activity_set = (HashMap<String, Integer>) t.get_Activity_set().clone();
         Matrix = new int[Activity_set.size()][Length];
+        phase = new String[Length];
         construct_Matrix();
     }
 
@@ -54,5 +54,30 @@ public class ConvertedTrace {
 
     public int[][] get_Matrix() {
         return this.Matrix;
+    }
+
+    public String get_ID() {
+        return this.ID;
+    }
+
+    public int get_scale() {
+        return this.scale;
+    }
+
+    public HashMap<String, Integer> get_Activity_set() {
+        return this.Activity_set;
+    }
+
+    public boolean set_phase(String[] divided_phase) {
+        this.phase = divided_phase;
+        return true;
+    }
+
+    public String[] get_phase() {
+        return this.phase;
+    }
+
+    public int get_length() {
+        return this.Length;
     }
 }
