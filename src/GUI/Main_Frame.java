@@ -46,6 +46,7 @@ public class Main_Frame extends javax.swing.JFrame {
         jMenuBar = new javax.swing.JMenuBar();
         jMenu_File = new javax.swing.JMenu();
         jMenuItem_OpenFile = new javax.swing.JMenuItem();
+        jMenuItem_Export = new javax.swing.JMenuItem();
         jMenu_Edit = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -74,6 +75,14 @@ public class Main_Frame extends javax.swing.JFrame {
         });
         jMenu_File.add(jMenuItem_OpenFile);
 
+        jMenuItem_Export.setText("Export");
+        jMenuItem_Export.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_ExportActionPerformed(evt);
+            }
+        });
+        jMenu_File.add(jMenuItem_Export);
+
         jMenuBar.add(jMenu_File);
 
         jMenu_Edit.setText("Edit");
@@ -86,20 +95,23 @@ public class Main_Frame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton_Convert)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 206, Short.MAX_VALUE)
-                .addComponent(jButton_SummerPhase)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(149, 149, 149)
+                        .addComponent(jButton_Convert, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton_SummerPhase)))
+                .addContainerGap(154, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton_Convert)
-                    .addComponent(jButton_SummerPhase))
-                .addContainerGap(245, Short.MAX_VALUE))
+                .addComponent(jButton_SummerPhase)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
+                .addComponent(jButton_Convert, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -124,6 +136,21 @@ public class Main_Frame extends javax.swing.JFrame {
 
         converted_traces = DataConvert.Convert(traces);
 
+        System.out.println("Converting finished");
+    }//GEN-LAST:event_jButton_ConvertActionPerformed
+
+    private void jButton_SummerPhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SummerPhaseActionPerformed
+        // TODO add your handling code here:
+        //Divide summer phases
+        for (ConvertedTrace ct : converted_traces) {
+            String[] phase = Phasing_summer.Divide_Phase_Summer(ct);
+            ct.set_phase(phase);
+        }
+        System.out.println("Phasing finished");
+    }//GEN-LAST:event_jButton_SummerPhaseActionPerformed
+
+    private void jMenuItem_ExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ExportActionPerformed
+        // TODO add your handling code here:
         int response = jFileChooser_Open.showOpenDialog(this);
         if (response == JFileChooser.APPROVE_OPTION) {
             // Read csv train_file_name here
@@ -134,16 +161,7 @@ public class Main_Frame extends javax.swing.JFrame {
             System.out.println("Writing file: " + output_file);
             Export_file(output_file);
         }
-    }//GEN-LAST:event_jButton_ConvertActionPerformed
-
-    private void jButton_SummerPhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SummerPhaseActionPerformed
-        // TODO add your handling code here:
-        //Divide summer phases
-        for (ConvertedTrace ct : converted_traces) {
-            String[] phase = Phasing_summer.Divide_Phase_Summer(ct);
-            ct.set_phase(phase);
-        }
-    }//GEN-LAST:event_jButton_SummerPhaseActionPerformed
+    }//GEN-LAST:event_jMenuItem_ExportActionPerformed
 
     private void Export_file(String filename) {
         FileWriter myWriter = null;
@@ -230,6 +248,7 @@ public class Main_Frame extends javax.swing.JFrame {
     private javax.swing.JButton jButton_SummerPhase;
     private javax.swing.JFileChooser jFileChooser_Open;
     private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenuItem jMenuItem_Export;
     private javax.swing.JMenuItem jMenuItem_OpenFile;
     private javax.swing.JMenu jMenu_Edit;
     private javax.swing.JMenu jMenu_File;
