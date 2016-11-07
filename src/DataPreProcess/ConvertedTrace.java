@@ -25,14 +25,19 @@ public class ConvertedTrace {
     private HashMap<String, Integer> Activity_set;
 
     private int[][] Matrix;
-    private final int Length = 1000;
+    private int Length = 1000;
 
     public ConvertedTrace(Trace t) {
         this.ID = t.get_ID();
         this.activities = (ArrayList<Activity>) t.get_ActivityList().clone();
         this.start = t.get_start();
         this.end = t.get_end();
-        scale = (int) (end.getTime() - start.getTime()) / 1000 / Length + 1; //scale in 1s
+
+        Length = (int) (end.getTime() - start.getTime()) / 1000;
+
+//        scale = (int) (end.getTime() - start.getTime()) / 1000 / Length; //scale in 1s
+        scale = 1;
+        
         this.Activity_set = (HashMap<String, Integer>) t.get_Activity_set().clone();
         Matrix = new int[Activity_set.size()][Length];
         phase = new String[Length];
@@ -46,7 +51,7 @@ public class ConvertedTrace {
             int end_index = (int) (ac.get_endTime().getTime() - this.start.getTime()) / 1000 / scale;
             //Set corresponding cells to 1
             int row_index = Activity_set.get(ac.get_name());
-            for (int i = start_index; i <= end_index; i++) {
+            for (int i = start_index; i < end_index; i++) {
                 Matrix[row_index][i] = 1;
             }
         }
