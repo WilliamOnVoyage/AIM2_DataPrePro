@@ -59,14 +59,13 @@ public class ReadFile {
             for (int i = 1; i < csvRecords.size(); i++) {
                 CSVRecord record = csvRecords.get(i);
                 String ID = record.get(CaseID);
-                if (!ID_set.contains(ID)) {
+                if (!ID_set.contains(ID) || (i == csvRecords.size() - 1)) {
                     //Discard void trace
                     if (i != 1) {
                         traces.add(t);
                     }
-
-                    t = new Trace(ID);
                     ID_set.add(ID);
+                    t = new Trace(ID);
                 }
                 Activity ac = new Activity(record.get(Activity), record.get(StartTime), record.get(CompleteTime), record.get(Timestamp));
                 t.add_activity(ac);
