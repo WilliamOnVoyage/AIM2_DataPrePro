@@ -171,13 +171,13 @@ public class Main_Frame extends javax.swing.JFrame {
             StringBuilder strBd = new StringBuilder();
 
             for (ConvertedTrace ct : converted_traces) {
-                strBd.append("ID,");
+                strBd.append("id,");
                 strBd.append(ct.get_ID());
                 strBd.append("\n");
                 strBd.append("Scale,");
                 strBd.append(ct.get_scale());
                 strBd.append("\n");
-                strBd.append("Activity\n");
+                strBd.append("activity\n");
 
                 int[][] matrix = ct.get_Matrix().clone();
                 for (String ac : ct.get_Activity_set().keySet()) {
@@ -188,16 +188,16 @@ public class Main_Frame extends javax.swing.JFrame {
                     }
                     strBd.append("\n");
                 }
-                strBd.append("Phase");
-                //Output phase here
-                String[] phase = ct.get_phase();
-                if (phase.length > 0) {
-                    for (String i : phase) {
-                        strBd.append(",");
-                        strBd.append(i);
-                    }
-                }
-                strBd.append("\n");
+//                strBd.append("Phase");
+//                //Output phase here
+//                String[] phase = ct.get_phase();
+//                if (phase.length > 0) {
+//                    for (String i : phase) {
+//                        strBd.append(",");
+//                        strBd.append(i);
+//                    }
+//                }
+//                strBd.append("\n");
             }
 
             myWriter.write(strBd.toString());
