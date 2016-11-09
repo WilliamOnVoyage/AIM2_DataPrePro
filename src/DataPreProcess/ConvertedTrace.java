@@ -15,15 +15,15 @@ import java.util.HashMap;
  */
 public class ConvertedTrace {
 
-    private String ID;
-    private Date start;
-    private Date end;
+    private final String ID;
+    private final Date start;
+    private final Date end;
     private int scale = 1;
 
-    private ArrayList<Activity> activities;
+    private final ArrayList<Activity> activities;
     private String[] phase;
+    
     private HashMap<String, Integer> Activity_set;
-
     private int[][] Matrix;
     private int Length = 1000;
 
