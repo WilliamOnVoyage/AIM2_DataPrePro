@@ -7,8 +7,8 @@ package GUI;
 
 import DataPreProcess.ConvertedTrace;
 import DataPreProcess.DataConvert;
+import DataPreProcess.Phase;
 import DataPreProcess.Trace;
-import Phasing.Phasing_summer;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -42,7 +42,6 @@ public class Main_Frame extends javax.swing.JFrame {
 
         jFileChooser_Open = new javax.swing.JFileChooser();
         jButton_Convert = new javax.swing.JButton();
-        jButton_SummerPhase = new javax.swing.JButton();
         jMenuBar = new javax.swing.JMenuBar();
         jMenu_File = new javax.swing.JMenu();
         jMenuItem_OpenFile = new javax.swing.JMenuItem();
@@ -55,13 +54,6 @@ public class Main_Frame extends javax.swing.JFrame {
         jButton_Convert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_ConvertActionPerformed(evt);
-            }
-        });
-
-        jButton_SummerPhase.setText("Summer Phase");
-        jButton_SummerPhase.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_SummerPhaseActionPerformed(evt);
             }
         });
 
@@ -95,21 +87,14 @@ public class Main_Frame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(149, 149, 149)
-                        .addComponent(jButton_Convert, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton_SummerPhase)))
+                .addGap(149, 149, 149)
+                .addComponent(jButton_Convert, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(154, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton_SummerPhase)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
+                .addContainerGap(218, Short.MAX_VALUE)
                 .addComponent(jButton_Convert, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -125,7 +110,7 @@ public class Main_Frame extends javax.swing.JFrame {
             String address = jFileChooser_Open.getSelectedFile().getAbsolutePath();
             System.out.println(address);
             ReadFile file = new ReadFile();
-            file.readCsvFile(address);
+            file.readTrace(address);
             traces = file.get_Traces();
         }
     }//GEN-LAST:event_jMenuItem_OpenFileActionPerformed
@@ -133,21 +118,18 @@ public class Main_Frame extends javax.swing.JFrame {
     private void jButton_ConvertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConvertActionPerformed
         // TODO add your handling code here:
         System.out.println("Converting traces... ");
-
-        converted_traces = DataConvert.Convert(traces);
-
+        for (Trace t : traces) {
+            String id = t.get_ID();
+            ReadFile file = new ReadFile();
+            List<Phase> p = file.readPhase(id + "_phase.xlsx");
+            if (p != null) {
+                converted_traces = DataConvert.Convert(traces, p);
+            } else {
+                converted_traces = DataConvert.Convert(traces);
+            }
+        }
         System.out.println("Converting finished");
     }//GEN-LAST:event_jButton_ConvertActionPerformed
-
-    private void jButton_SummerPhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SummerPhaseActionPerformed
-        // TODO add your handling code here:
-        //Divide summer phases
-        for (ConvertedTrace ct : converted_traces) {
-            String[] phase = Phasing_summer.Divide_Phase_Summer(ct);
-            ct.set_phase(phase);
-        }
-        System.out.println("Phasing finished");
-    }//GEN-LAST:event_jButton_SummerPhaseActionPerformed
 
     private void jMenuItem_ExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ExportActionPerformed
         // TODO add your handling code here:
@@ -177,7 +159,17 @@ public class Main_Frame extends javax.swing.JFrame {
                 strBd.append("Scale,");
                 strBd.append(ct.get_scale());
                 strBd.append("\n");
-                strBd.append("activity\n");
+                
+                strBd.append("Phase");
+                //Output phase here
+                String[] phase = ct.get_phase();
+                if (phase.length > 0) {
+                    for (String i : phase) {
+                        strBd.append(",");
+                        strBd.append(i);
+                    }
+                }
+                strBd.append("\n");
 
                 int[][] matrix = ct.get_Matrix().clone();
                 for (String ac : ct.get_Activity_set().keySet()) {
@@ -188,16 +180,6 @@ public class Main_Frame extends javax.swing.JFrame {
                     }
                     strBd.append("\n");
                 }
-//                strBd.append("Phase");
-//                //Output phase here
-//                String[] phase = ct.get_phase();
-//                if (phase.length > 0) {
-//                    for (String i : phase) {
-//                        strBd.append(",");
-//                        strBd.append(i);
-//                    }
-//                }
-//                strBd.append("\n");
             }
 
             myWriter.write(strBd.toString());
@@ -245,7 +227,6 @@ public class Main_Frame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Convert;
-    private javax.swing.JButton jButton_SummerPhase;
     private javax.swing.JFileChooser jFileChooser_Open;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenuItem jMenuItem_Export;

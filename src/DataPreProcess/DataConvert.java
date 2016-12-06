@@ -25,4 +25,13 @@ public class DataConvert {
         return ConvertedTraces;
     }
 
+    public static List<ConvertedTrace> Convert(List<Trace> traces, List<Phase> p) {
+        ConvertedTraces = new ArrayList<>();
+        for (Trace t : traces) {
+            ConvertedTrace ct = new ConvertedTrace(t,p);
+            ConvertedTraces.add(ct);
+        }
+        return ConvertedTraces;
+    }
+
 }

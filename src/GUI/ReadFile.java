@@ -6,6 +6,7 @@
 package GUI;
 
 import DataPreProcess.Activity;
+import DataPreProcess.Phase;
 import DataPreProcess.Trace;
 import java.io.FileReader;
 import java.io.IOException;
@@ -23,7 +24,15 @@ import org.apache.commons.csv.CSVRecord;
  */
 public class ReadFile {
 
-    private final String[] FILE_HEADER_MAPPING = {"CaseID", "Activity", "StartTime", "CompleteTime", "Timestamp"};
+    private final String[] TRACE_HEADER_MAPPING = {"CaseID", "Activity", "StartTime", "CompleteTime", "Timestamp"};
+    private final String[] PHASE_HEADER_MAPPING = {"start time", "end time", "category", "Nth instance", "# descriptors", "descriptors..."};
+    private final String st_time = "start time";
+    private final String end_time = "end time";
+    private final String category = "category";
+    private final String Nth = "Nth instance";
+    private final String No_des = "# descriptors";
+    private final String des = "descriptors...";
+
     private final String CaseID = "CaseID";
     private final String Activity = "Activity";
     private final String StartTime = "StartTime";
@@ -32,11 +41,11 @@ public class ReadFile {
 
     private List<Trace> traces;
 
-    public boolean readCsvFile(String fileName) {
+    public boolean readTrace(String fileName) {
         FileReader fileReader;
         CSVParser csvFileParser;
         boolean isSuccess = true;
-        CSVFormat csvFileFormat = CSVFormat.DEFAULT.withHeader(FILE_HEADER_MAPPING);
+        CSVFormat csvFileFormat = CSVFormat.DEFAULT.withHeader(TRACE_HEADER_MAPPING);
 
         try {
             HashMap<String, Integer> Activity_set = new HashMap<String, Integer>();
@@ -90,6 +99,33 @@ public class ReadFile {
             }
         }
         return isSuccess;
+    }
+
+    public List<Phase> readPhase(String fileName) {
+        FileReader fileReader;
+        CSVParser csvFileParser;
+        CSVFormat csvFileFormat = CSVFormat.DEFAULT.withHeader(PHASE_HEADER_MAPPING);
+        List<Phase> phase_list = new ArrayList<>();
+        try {
+            fileReader = new FileReader(fileName);
+            //initialize CSVParser object
+            csvFileParser = new CSVParser(fileReader, csvFileFormat);
+            //Get a list of CSV file records
+            List<CSVRecord> csvRecords = csvFileParser.getRecords();
+            //Read the CSV file records starting from the second record to skip the header
+            for (int i = 1; i < csvRecords.size(); i++) {
+                CSVRecord record = csvRecords.get(i);
+                Phase p = new Phase(record.get(st_time), record.get(end_time), record.get(category));
+                phase_list.add(p);
+            }
+            fileReader.close();
+            csvFileParser.close();
+        } catch (Exception e) {
+            System.out.println("Phase file error!!!");
+            e.printStackTrace();
+            return null;
+        }
+        return phase_list;
     }
 
     public List<Trace> get_Traces() {

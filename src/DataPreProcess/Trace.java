@@ -71,5 +71,9 @@ public class Trace {
     public Date get_end() {
         return this.end;
     }
+
+    public int get_length() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
