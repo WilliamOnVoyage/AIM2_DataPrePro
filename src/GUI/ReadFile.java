@@ -8,12 +8,16 @@ package GUI;
 import DataPreProcess.Activity;
 import DataPreProcess.Phase;
 import DataPreProcess.Trace;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -120,9 +124,15 @@ public class ReadFile {
             }
             fileReader.close();
             csvFileParser.close();
-        } catch (Exception e) {
-            System.out.println("Phase file error!!!");
-            e.printStackTrace();
+            System.out.println(fileName + " Phase file read!");
+        } catch (FileNotFoundException e) {
+            System.out.println(fileName + " Phase file missing ...");
+            return null;
+        } catch (IOException ex) {
+            System.out.println(fileName + " csv file error !!!");
+            return null;
+        } catch (ParseException ex) {
+            System.out.println(fileName + " phase parsing error !!!");
             return null;
         }
         return phase_list;

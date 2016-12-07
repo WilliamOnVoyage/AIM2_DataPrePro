@@ -6,12 +6,12 @@
 package GUI;
 
 import DataPreProcess.ConvertedTrace;
-import DataPreProcess.DataConvert;
 import DataPreProcess.Phase;
 import DataPreProcess.Trace;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFileChooser;
 
@@ -118,14 +118,18 @@ public class Main_Frame extends javax.swing.JFrame {
     private void jButton_ConvertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConvertActionPerformed
         // TODO add your handling code here:
         System.out.println("Converting traces... ");
+        String phase_data_path = "Data/original_data/";
+        converted_traces = new ArrayList<>();
         for (Trace t : traces) {
             String id = t.get_ID();
             ReadFile file = new ReadFile();
-            List<Phase> p = file.readPhase(id + "_phase.xlsx");
+            List<Phase> p = file.readPhase(phase_data_path + id + "_phase.csv");
             if (p != null) {
-                converted_traces = DataConvert.Convert(traces, p);
+                ConvertedTrace ct = new ConvertedTrace(t, p);
+                converted_traces.add(ct);
             } else {
-                converted_traces = DataConvert.Convert(traces);
+                ConvertedTrace ct = new ConvertedTrace(t);
+                converted_traces.add(ct);
             }
         }
         System.out.println("Converting finished");
@@ -159,7 +163,7 @@ public class Main_Frame extends javax.swing.JFrame {
                 strBd.append("Scale,");
                 strBd.append(ct.get_scale());
                 strBd.append("\n");
-                
+
                 strBd.append("Phase");
                 //Output phase here
                 String[] phase = ct.get_phase();
