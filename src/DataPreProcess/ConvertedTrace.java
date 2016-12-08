@@ -156,6 +156,7 @@ public class ConvertedTrace {
             } else if (ac.get_startTime().after(pt_st) || ac.get_startTime().equals(pt_st)) {
                 start_index = (int) ((double) (ac.get_startTime().getTime() - pt_st.getTime()) / (double) (pt_ed.getTime() - pt_st.getTime()) * pt_arrival_length);
             } else {
+                start_index = 0;
                 //Patient departure, not included
             }
 
@@ -170,6 +171,7 @@ public class ConvertedTrace {
             } else if (ac.get_endTime().before(pst_sec_ed) || ac.get_endTime().equals(pst_sec_ed)) {
                 end_index = pt_arrival_length + Primary_length + Secondary_length + Pst_secondary_length - (int) ((double) (pst_sec_ed.getTime() - ac.get_endTime().getTime()) / (double) (pst_sec_ed.getTime() - pst_sec_st.getTime()) * Pst_secondary_length);
             } else {
+                end_index = Length;
                 //Patient departure, not included
             }
             end_index = end_index >= Length ? Length : end_index; // Avoid out of boundry

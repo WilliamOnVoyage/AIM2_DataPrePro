@@ -128,8 +128,8 @@ public class Main_Frame extends javax.swing.JFrame {
                 ConvertedTrace ct = new ConvertedTrace(t, p);
                 converted_traces.add(ct);
             } else {
-                ConvertedTrace ct = new ConvertedTrace(t);
-                converted_traces.add(ct);
+//                ConvertedTrace ct = new ConvertedTrace(t);
+//                converted_traces.add(ct);
             }
         }
         System.out.println("Converting finished");
