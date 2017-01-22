@@ -120,6 +120,7 @@ public class Main_Frame extends javax.swing.JFrame {
         System.out.println("Converting traces... ");
         String phase_data_path = "Data/original_data/";
         converted_traces = new ArrayList<>();
+        double[] phase_p = {0, 0, 0, 0};
         for (Trace t : traces) {
             String id = t.get_ID();
             ReadFile file = new ReadFile();
@@ -127,11 +128,25 @@ public class Main_Frame extends javax.swing.JFrame {
             if (p != null) {
                 ConvertedTrace ct = new ConvertedTrace(t, p);
                 converted_traces.add(ct);
+                phase_p[0] += ct.get_phasePercentage()[0];
+                phase_p[1] += ct.get_phasePercentage()[1];
+                phase_p[2] += ct.get_phasePercentage()[2];
+                phase_p[3] += ct.get_phasePercentage()[3];
             } else {
 //                ConvertedTrace ct = new ConvertedTrace(t);
 //                converted_traces.add(ct);
             }
         }
+        phase_p[0] /= traces.size();
+        phase_p[1] /= traces.size();
+        phase_p[2] /= traces.size();
+        phase_p[3] /= traces.size();
+        System.out.print(
+                "Patient-arrival: " + phase_p[0] + " "
+                + "Primary: " + phase_p[1] + " "
+                + "Secondary: " + phase_p[2] + " "
+                + "Post-secondary: " + phase_p[3] + "\n"
+        );
         System.out.println("Converting finished");
     }//GEN-LAST:event_jButton_ConvertActionPerformed
 

@@ -1,11 +1,7 @@
-start time,end time,category,Nth instance,# descriptors,descriptors...,,start time,end time,category,Nth instance,# descriptors,descriptors...
-0:51:17,0:51:34,Pre-Arrival,1,0,,,18:30:14,18:30:31,Pre-Arrival,1,0,
-0:51:34,0:51:35,Pt arrival,1,0,,,18:30:31,18:30:32,Pt arrival,1,0,
-0:52:02,0:55:38,Primary,1,0,,,18:30:59,18:34:35,Primary,1,0,
-0:55:38,1:02:10,Secondary,1,0,,,18:34:35,18:41:07,Secondary,1,0,
-1:02:10,1:14:53,Post-Secondary,1,0,,,18:41:07,18:53:50,Post-Secondary,1,0,
-1:14:53,1:14:54,Pt departure,1,0,,,18:53:50,18:53:51,Pt departure,1,0,
-
-Video start time:,17:38:57,,,,,,,,,,,
-
-,0:00 tt:01,,,,,,,,,,,
+start time, end time, category,Nth instance, # descriptors, descriptors...
+, , Pre-Arrival,, , 
+, , Pt arrival,, , 
+, , Primary,, , 
+, , Secondary,, , 
+, , Post-Secondary,, , 
+, , Pt departure,, , 

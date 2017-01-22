@@ -1,0 +1,7 @@
+start time, end time, category,Nth instance, # descriptors, descriptors...
+00:00:08:75, 00:11:25:62, Pre-Arrival,, , 
+00:11:25:62, 00:11:26:62, Pt arrival,, , 
+00:13:05:00, 00:16:47:12, Primary,, , 
+00:16:47:12, 00:22:37:62, Secondary,, , 
+00:22:37:62, 00:34:56:00, Post-Secondary,, , 
+00:34:56:00, 00:34:57:00, Pt departure,, , 

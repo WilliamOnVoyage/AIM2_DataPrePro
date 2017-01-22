@@ -27,18 +27,19 @@ public class ConvertedTrace {
     private HashMap<String, Integer> Activity_set;
     private int[][] Matrix;
     private int Length = 3600;  //Normalize into 1 hour
-    private int pt_arrival_length = (int) (Length * 0.25);
-    private int Primary_length = (int) (Length * 0.25);
-    private int Secondary_length = (int) (Length * 0.25);
-    private int Pst_secondary_length = (int) (Length * 0.25);
+    private double[] phase_per = {0, 0, 0, 0};
+    private int pt_arrival_length = (int) (Length * 0.04);
+    private int Primary_length = (int) (Length * 0.12);
+    private int Secondary_length = (int) (Length * 0.30);
+    private int Pst_secondary_length = (int) (Length * 0.54);
 
-    private String pre_arr = "Pre-Arrival";
-    private String pt = "Pt arrival";
-    private String pre_pri = "Pre-Primary";
-    private String pri = "Primary";
-    private String sec = "Secondary";
-    private String pst_sec = "Post-Secondary";
-    private String pd = "Pt departure";
+    private String pre_arr = " Pre-Arrival";
+    private String pt = " Pt arrival";
+    private String pre_pri = " Pre-Primary";
+    private String pri = " Primary";
+    private String sec = " Secondary";
+    private String pst_sec = " Post-Secondary";
+    private String pd = " Pt departure";
 
     private List<Phase> p;
 
@@ -100,35 +101,39 @@ public class ConvertedTrace {
         Date pd_ed = null;
         //Get all the date
         for (Phase ph : p) {
-            if (pre_arr.equals(ph.phaseName)) {
+            if (pre_arr.contains(ph.phaseName)) {
                 cali_st = ph.start;
             }
-            if (pt.equals(ph.phaseName)) {
+            if (pt.contains(ph.phaseName)) {
                 pt_st = ph.start;
                 pt_ed = ph.end;
             }
-            if (pre_pri.equals(ph.phaseName)) {
+            if (pre_pri.contains(ph.phaseName)) {
                 pt_ed = ph.end;
             }
-            if (pri.equals(ph.phaseName)) {
+            if (pri.contains(ph.phaseName)) {
+                pt_ed = ph.start;
                 pri_st = ph.start;
                 pri_ed = ph.end;
             }
-            if (sec.equals(ph.phaseName)) {
+            if (sec.contains(ph.phaseName)) {
                 sec_st = ph.start;
                 sec_ed = ph.end;
             }
-            if (pst_sec.equals(ph.phaseName)) {
+            if (pst_sec.contains(ph.phaseName)) {
                 pst_sec_st = ph.start;
                 pst_sec_ed = ph.end;
             }
-            if (pd.equals(ph.phaseName)) {
+            if (pd.contains(ph.phaseName)) {
                 pd_st = ph.start;
                 pd_ed = ph.end;
             }
         }
 
-        long time_shift = pt_st.getTime() - cali_st.getTime();
+        long time_shift = 0;
+        if (cali_st != null) {
+            time_shift = pt_st.getTime() - cali_st.getTime();
+        }
 
 //        Calibrate start time
         pt_st = new Date(pt_st.getTime() - time_shift);
@@ -142,10 +147,17 @@ public class ConvertedTrace {
         pd_st = new Date(pd_st.getTime() - time_shift);
         pd_ed = new Date(pd_ed.getTime() - time_shift);
 
+        double duration = pst_sec_ed.getTime() - pt_st.getTime();
+        phase_per[0] = (double) (pt_ed.getTime() - pt_st.getTime()) / duration;
+        phase_per[1] = (double) (pri_ed.getTime() - pri_st.getTime()) / duration;
+        phase_per[2] = (double) (sec_ed.getTime() - sec_st.getTime()) / duration;
+        phase_per[3] = (double) (pst_sec_ed.getTime() - pst_sec_st.getTime()) / duration;
+
         for (Activity ac : activities) {
             int start_index = 0;
             int end_index = 0;
             if (ac.get_startTime().after(pd_ed)) {
+                start_index = Length - 1;
                 //wrong situation, start after end
             } else if (ac.get_startTime().after(pst_sec_st) || ac.get_startTime().equals(pst_sec_st)) {
                 start_index = pt_arrival_length + Primary_length + Secondary_length + (int) ((double) (ac.get_startTime().getTime() - pst_sec_st.getTime()) / (double) (pst_sec_ed.getTime() - pst_sec_st.getTime()) * Pst_secondary_length);
@@ -157,10 +169,10 @@ public class ConvertedTrace {
                 start_index = (int) ((double) (ac.get_startTime().getTime() - pt_st.getTime()) / (double) (pt_ed.getTime() - pt_st.getTime()) * pt_arrival_length);
             } else {
                 start_index = 0;
-                //Patient departure, not included
             }
 
             if (ac.get_endTime().before(pt_st)) {
+                end_index = 0;
                 //wrong situation, end before start
             } else if (ac.get_endTime().before(pt_ed) || ac.get_endTime().equals(pt_ed)) {
                 end_index = pt_arrival_length - (int) ((double) (pt_ed.getTime() - ac.get_endTime().getTime()) / (double) (pt_ed.getTime() - pt_st.getTime()) * pt_arrival_length);
@@ -231,5 +243,9 @@ public class ConvertedTrace {
 
     public int get_length() {
         return this.Length;
+    }
+
+    public double[] get_phasePercentage() {
+        return this.phase_per;
     }
 }
