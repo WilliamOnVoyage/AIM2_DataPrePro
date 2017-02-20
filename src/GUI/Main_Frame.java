@@ -41,6 +41,7 @@ public class Main_Frame extends javax.swing.JFrame {
     private void initComponents() {
 
         jFileChooser_Open = new javax.swing.JFileChooser();
+        jButton_Convert_Phasefiles = new javax.swing.JButton();
         jButton_Convert = new javax.swing.JButton();
         jMenuBar = new javax.swing.JMenuBar();
         jMenu_File = new javax.swing.JMenu();
@@ -49,6 +50,13 @@ public class Main_Frame extends javax.swing.JFrame {
         jMenu_Edit = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jButton_Convert_Phasefiles.setText("Convert with phase files");
+        jButton_Convert_Phasefiles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_Convert_PhasefilesActionPerformed(evt);
+            }
+        });
 
         jButton_Convert.setText("Convert");
         jButton_Convert.addActionListener(new java.awt.event.ActionListener() {
@@ -87,16 +95,20 @@ public class Main_Frame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(149, 149, 149)
-                .addComponent(jButton_Convert, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(154, Short.MAX_VALUE))
+                .addGap(122, 122, 122)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton_Convert, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton_Convert_Phasefiles))
+                .addContainerGap(129, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(218, Short.MAX_VALUE)
-                .addComponent(jButton_Convert, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(48, 48, 48)
+                .addComponent(jButton_Convert, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton_Convert_Phasefiles, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(123, Short.MAX_VALUE))
         );
 
         pack();
@@ -115,7 +127,7 @@ public class Main_Frame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem_OpenFileActionPerformed
 
-    private void jButton_ConvertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConvertActionPerformed
+    private void jButton_Convert_PhasefilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Convert_PhasefilesActionPerformed
         // TODO add your handling code here:
         System.out.println("Converting traces... ");
         String phase_data_path = "Data/original_data/";
@@ -148,7 +160,7 @@ public class Main_Frame extends javax.swing.JFrame {
                 + "Post-secondary: " + phase_p[3] + "\n"
         );
         System.out.println("Converting finished");
-    }//GEN-LAST:event_jButton_ConvertActionPerformed
+    }//GEN-LAST:event_jButton_Convert_PhasefilesActionPerformed
 
     private void jMenuItem_ExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ExportActionPerformed
         // TODO add your handling code here:
@@ -163,6 +175,17 @@ public class Main_Frame extends javax.swing.JFrame {
             Export_file(output_file);
         }
     }//GEN-LAST:event_jMenuItem_ExportActionPerformed
+
+    private void jButton_ConvertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConvertActionPerformed
+        // TODO add your handling code here:
+        System.out.println("Converting traces... ");
+        converted_traces = new ArrayList<>();
+        for (Trace t : traces) {
+            ConvertedTrace ct = new ConvertedTrace(t);
+            converted_traces.add(ct);
+        }
+        System.out.println("Converting finished");
+    }//GEN-LAST:event_jButton_ConvertActionPerformed
 
     private void Export_file(String filename) {
         FileWriter myWriter = null;
@@ -190,10 +213,10 @@ public class Main_Frame extends javax.swing.JFrame {
                 }
                 strBd.append("\n");
 
-                int[][] matrix = ct.get_Matrix().clone();
+                double[][] matrix = ct.get_Matrix().clone();
                 for (String ac : ct.get_Activity_set().keySet()) {
                     strBd.append(ac);
-                    for (int cell : matrix[ct.get_Activity_set().get(ac)]) {
+                    for (double cell : matrix[ct.get_Activity_set().get(ac)]) {
                         strBd.append(",");
                         strBd.append(cell);
                     }
@@ -246,6 +269,7 @@ public class Main_Frame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Convert;
+    private javax.swing.JButton jButton_Convert_Phasefiles;
     private javax.swing.JFileChooser jFileChooser_Open;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenuItem jMenuItem_Export;

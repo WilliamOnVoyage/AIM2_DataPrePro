@@ -8,6 +8,8 @@ package DataPreProcess;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *
@@ -20,12 +22,17 @@ public class Trace {
     private Date end;
 
     private ArrayList<Activity> activities;
-    private String[] phase;
+    private HashMap<String, Date[]> phase;
     private HashMap<String, Integer> Activity_set;
+    private TreeMap<String, Integer> sorted_Activity_set;
 
     public Trace(String ID) {
         this.ID = ID;
         activities = new ArrayList<>();
+        phase = new HashMap<>();
+        phase.put("P1", null);
+        phase.put("P2", null);
+        phase.put("P3", null);
     }
 
     public void add_activity(Activity ac) {
@@ -34,6 +41,33 @@ public class Trace {
             initial_time(ac);
         } else {
             update_time(ac);
+        }
+        check_phase(ac);
+    }
+
+    @SuppressWarnings("empty-statement")
+    private void check_phase(Activity ac) {
+        if (ac.get_name().equals("D")) {
+            Date[] dates = {start, ac.get_endTime()};
+            phase.put("P1", dates);
+            if (phase.get("P2") != null) {
+                Date[] up_dates = {ac.get_endTime(), (Date) phase.get("P2")[1]};
+                phase.put("P2", up_dates);
+            } else {
+                Date[] up_dates = {ac.get_endTime(), ac.get_endTime()};
+                phase.put("P2", up_dates);
+            }
+        }
+        if (ac.get_name().equals("L")) {
+            if (phase.get("P2") != null) {
+                Date[] dates = {(Date) phase.get("P2")[0], ac.get_endTime()};
+                phase.put("P2", dates);
+            } else {
+                Date[] dates = {ac.get_endTime(), ac.get_endTime()};
+                phase.put("P2", dates);
+            }
+            Date[] up_dates = {ac.get_endTime(), end};
+            phase.put("P3", up_dates);
         }
     }
 
@@ -75,5 +109,9 @@ public class Trace {
     public int get_length() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    public TreeMap<String, Integer> get_sorted_activitySet() {
+        return sorted_Activity_set = new TreeMap<String, Integer>(this.Activity_set);
+    }
+
 }

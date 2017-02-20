@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
+import java.lang.Object;
+import java.text.DecimalFormat;
+import org.apache.commons.math3.distribution.NormalDistribution;
 
 /**
  *
@@ -19,19 +23,23 @@ public class ConvertedTrace {
     private final String ID;
     private final Date start;
     private final Date end;
+//    private final double Round = 10000;//Rounding for matrix
+    private final DecimalFormat round = new DecimalFormat("#.00000000");
+
     private double scale = 1;
 
     private final ArrayList<Activity> activities;
     private String[] phase;
 
-    private HashMap<String, Integer> Activity_set;
-    private int[][] Matrix;
+    private TreeMap<String, Integer> Activity_set;
+    private double[][] Matrix;
     private int Length = 3600;  //Normalize into 1 hour
+
     private double[] phase_per = {0, 0, 0, 0};
-    private int pt_arrival_length = (int) (Length * 0.04);
-    private int Primary_length = (int) (Length * 0.12);
-    private int Secondary_length = (int) (Length * 0.30);
-    private int Pst_secondary_length = (int) (Length * 0.54);
+    private int pt_arrival_length = (int) (Length * 0.25);
+    private int Primary_length = (int) (Length * 0.25);
+    private int Secondary_length = (int) (Length * 0.25);
+    private int Pst_secondary_length = (int) (Length * 0.25);
 
     private String pre_arr = " Pre-Arrival";
     private String pt = " Pt arrival";
@@ -49,11 +57,14 @@ public class ConvertedTrace {
         this.start = t.get_start();
         this.end = t.get_end();
 //        Length = (int) (end.getTime() - start.getTime()) / 1000;  //Dont use this when normalized
-        double duration = (end.getTime() - start.getTime()) / 1000; //in seconds
+        Length = 3600;
+        int scaler = 1;
+        Length = Length / scaler;
+        double duration = (end.getTime() - start.getTime()) / 1000 / scaler; //in seconds
         scale = duration / Length; //scale in 1s
-//        scale = 1;
-        this.Activity_set = (HashMap<String, Integer>) t.get_Activity_set().clone();
-        Matrix = new int[Activity_set.size()][Length];
+        this.Activity_set = (TreeMap<String, Integer>) t.get_sorted_activitySet().clone();
+
+        Matrix = new double[Activity_set.size()][Length];
         phase = new String[Length];
         construct_Matrix();
     }
@@ -63,10 +74,10 @@ public class ConvertedTrace {
         this.activities = (ArrayList<Activity>) t.get_ActivityList().clone();
         this.start = t.get_start();
         this.end = t.get_end();
-        this.Activity_set = (HashMap<String, Integer>) t.get_Activity_set().clone();
+        this.Activity_set = (TreeMap<String, Integer>) t.get_sorted_activitySet().clone();
         this.p = p;
 
-        Matrix = new int[Activity_set.size()][Length];
+        Matrix = new double[Activity_set.size()][Length];
         phase = new String[Length];
         construct_Matrix_Phase();
         construct_phase();
@@ -192,13 +203,16 @@ public class ConvertedTrace {
             try {
                 if (end_index < start_index) {
                     System.out.println("Activity: " + ac.get_name() + " Index incorrect: " + " st:" + start_index + " ed:" + end_index);
-                }
-                for (int i = start_index; i < end_index; i++) {
-                    Matrix[row_index][i] = 1;
+                } else {
+                    if (end_index == start_index && end_index + 1 < Length) {
+                        end_index++;
+                    }
+                    fill_activity(row_index, start_index, end_index);
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("Activity: " + ac.get_name() + " st:" + start_index + " ed:" + end_index + " OutOfBounds!!!");
             }
+            normalize_matrix_row();
         }
     }
 
@@ -210,13 +224,43 @@ public class ConvertedTrace {
             end_index = end_index >= Length ? Length : end_index; // Avoid out of boundry
             //Set corresponding cells to 1
             int row_index = Activity_set.get(ac.get_name());
-            for (int i = start_index; i < end_index; i++) {
-                Matrix[row_index][i] = 1;
+            if (!ac.get_name().equals("Warm sheet-EC")) {
+                fill_activity(row_index, start_index, end_index);
+            }
+        }
+        normalize_matrix_row();
+    }
+
+    private void fill_activity(int row, int st, int ed) {
+        int mid = (ed + st) / 2;
+        double sd = (double) (ed - st) / 4;
+        NormalDistribution ND = new NormalDistribution(mid, sd);
+        for (int i = 0; i < Length; i++) {
+            double pro_density = ND.density(i);
+            Matrix[row][i] += pro_density;
+        }
+    }
+
+    private void normalize_matrix_row() {
+        for (int row = 0; row < Matrix.length; row++) {
+            double min = 1;
+            double max = 0;
+            for (int col = 0; col < Matrix[row].length; col++) {
+                min = Matrix[row][col] < min ? Matrix[row][col] : min;
+                max = Matrix[row][col] > max ? Matrix[row][col] : max;
+            }
+            for (int col = 0; col < Matrix[row].length; col++) {
+                double val = (Matrix[row][col] - min) / (max - min);
+                if (round.format(val).equals("�")) {
+                    Matrix[row][col] = 0;
+                } else {
+                    Matrix[row][col] = Double.parseDouble(round.format(val));
+                }
             }
         }
     }
 
-    public int[][] get_Matrix() {
+    public double[][] get_Matrix() {
         return this.Matrix;
     }
 
@@ -228,7 +272,7 @@ public class ConvertedTrace {
         return this.scale;
     }
 
-    public HashMap<String, Integer> get_Activity_set() {
+    public TreeMap<String, Integer> get_Activity_set() {
         return this.Activity_set;
     }
 
