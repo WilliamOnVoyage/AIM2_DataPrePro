@@ -235,9 +235,12 @@ public class ConvertedTrace {
         int mid = (ed + st) / 2;
         double sd = (double) (ed - st) / 4;
         NormalDistribution ND = new NormalDistribution(mid, sd);
-        for (int i = 0; i < Length; i++) {
-            double pro_density = ND.density(i);
-            Matrix[row][i] += pro_density;
+//        for (int i = 0; i < Length; i++) {
+//            double pro_density = ND.density(i);
+//            Matrix[row][i] += pro_density;
+//        }
+        for (int i = st; i < ed; i++) {
+            Matrix[row][i] = 1;
         }
     }
 
@@ -251,7 +254,7 @@ public class ConvertedTrace {
             }
             for (int col = 0; col < Matrix[row].length; col++) {
                 double val = (Matrix[row][col] - min) / (max - min);
-                if (round.format(val).equals("�")) {
+                if (max + min == 0) {
                     Matrix[row][col] = 0;
                 } else {
                     Matrix[row][col] = Double.parseDouble(round.format(val));
