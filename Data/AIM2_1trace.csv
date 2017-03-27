@@ -1,0 +1,60 @@
+Case ID,Activity,Start Time,Complete Time,
+140828,Visual assessment-AA,0:00:45,0:00:52,0
+140828,Cardiac Lead Placement-CA,0:00:51,0:01:16,0
+140828,Chest Auscultation-BA,0:00:55,0:00:58,0
+140828,Oxygen-BC,0:00:59,0:04:49,0
+140828,R DP/PT-PC,0:01:04,0:01:05,0
+140828,MBP-BP,0:01:20,0:01:39,0
+140828,Total Verbalized-GCS,0:01:29,0:01:30,0
+140828,Clothing removed-EC,0:01:33,0:01:41,0
+140828,ABP Cuff Placement-CA,0:01:34,0:01:41,0
+140828,Pulse Ox Placement-BA,0:01:50,0:02:02,0
+140828,Total Verbalized-GCS,0:01:50,0:01:51,0
+140828,Eyes Verbalized-GCS,0:01:53,0:01:55,0
+140828,Verbal Verbalized-GCS,0:01:56,0:02:00,0
+140828,Motor Verbalized-GCS,0:02:01,0:02:03,0
+140828,Right pupil-PU,0:02:12,0:02:18,0
+140828,Left pupil-PU,0:02:19,0:02:24,0
+140828,Right pupil-PU,0:02:24,0:02:25,0
+140828,Visual inspection-H,0:02:33,0:02:34,0
+140828,Palpation-H,0:02:33,0:02:37,0
+140828,Temperature-EA,0:02:40,0:03:02,0
+140828,Visual inspection-H,0:02:42,0:03:05,0
+140828,Palpation-H,0:02:42,0:03:05,0
+140828,Palpation-F,0:03:06,0:03:12,0
+140828,Visual inspection-F,0:03:06,0:03:12,0
+140828,L Visual inspection-EAR,0:03:13,0:03:15,0
+140828,Visual inspection-N,0:03:21,0:03:22,0
+140828,R Visual inspection-EAR,0:03:36,0:03:42,0
+140828,R otoscopy-EAR,0:03:36,0:03:42,0
+140828,R Visual inspection-EAR,0:03:53,0:03:59,0
+140828,R otoscopy-EAR,0:03:53,0:03:59,0
+140828,R Visual inspection-EAR,0:04:14,0:04:25,0
+140828,R otoscopy-EAR,0:04:14,0:04:25,0
+140828,Visual inspection-N,0:04:43,0:04:44,0
+140828,Visual inspection-M,0:04:44,0:04:47,0
+140828,Palpation-NE,0:04:53,0:04:56,0
+140828,Visual inspection-NE,0:04:53,0:04:56,0
+140828,L Visual inspection-EAR,0:05:08,0:05:19,0
+140828,L otoscopy-EAR,0:05:08,0:05:19,0
+140828,Palpation-NE,0:05:11,0:05:17,0
+140828,Visual inspection-NE,0:05:11,0:05:17,0
+140828,Palpation-C,0:05:17,0:05:24,0
+140828,Visual inspection-C,0:05:17,0:05:24,0
+140828,Chest Auscultation-BA,0:05:40,0:05:51,0
+140828,Palpation-A,0:05:56,0:06:03,0
+140828,Visual inspection-A,0:05:56,0:06:03,0
+140828,Stability-PE,0:06:09,0:06:12,0
+140828,Palpation-RLE,0:06:23,0:06:33,0
+140828,Visual inspection-RLE,0:06:23,0:06:33,0
+140828,Palpation-LLE,0:06:34,0:06:46,0
+140828,Visual inspection-LLE,0:06:34,0:06:46,0
+140828,Palpation-LUE,0:06:48,0:06:58,0
+140828,Visual inspection-LUE,0:06:48,0:06:58,0
+140828,Palpation-RUE,0:07:07,0:07:18,0
+140828,Visual inspection-RUE,0:07:07,0:07:18,0
+140828,Palpation-LUE,0:07:18,0:07:22,0
+140828,Visual inspection-LUE,0:07:18,0:07:22,0
+140828,Log roll-BK,0:07:32,0:08:00,0
+140828,Rectal-BK,0:07:48,0:07:50,0
+140828,Visual inspection-NE,0:08:32,0:08:32,0

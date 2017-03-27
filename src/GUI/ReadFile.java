@@ -13,6 +13,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -52,7 +54,7 @@ public class ReadFile {
         CSVFormat csvFileFormat = CSVFormat.DEFAULT.withHeader(TRACE_HEADER_MAPPING);
 
         try {
-            HashMap<String, Integer> Activity_set = new HashMap<String, Integer>();
+            ArrayList<String> Activity_set = new ArrayList<String>();
             HashSet<String> ID_set = new HashSet<String>();
             traces = new ArrayList<Trace>();
             //initialize FileReader object
@@ -64,7 +66,6 @@ public class ReadFile {
             //Get a list of CSV file records
             List<CSVRecord> csvRecords = csvFileParser.getRecords();
             Trace t = new Trace("");
-            int activity_index = 0;
             //Read the CSV file records starting from the second record to skip the header
             for (int i = 1; i < csvRecords.size(); i++) {
                 CSVRecord record = csvRecords.get(i);
@@ -80,14 +81,25 @@ public class ReadFile {
                 Activity ac = new Activity(record.get(Activity), record.get(StartTime), record.get(CompleteTime), record.get(Timestamp));
                 t.add_activity(ac);
 
-                if (!Activity_set.containsKey(record.get(Activity))) {
-                    Activity_set.put(record.get(Activity), activity_index);
-                    activity_index++;
+                if (!Activity_set.contains(ac.get_name())) {
+                    Activity_set.add(ac.get_name());
                 }
             }
-            for (Trace t_ : traces) {
-                t_.set_ActivitySet((HashMap<String, Integer>) Activity_set.clone());
+            //sort activity set by string
+            Collections.sort(Activity_set);
+            
+            //sort trace by ID
+            Collections.sort(traces, new Comparator<Trace>() {
+                @Override
+                public int compare(Trace t1, Trace t2) {
+                    return Integer.parseInt(t1.get_ID()) < Integer.parseInt(t2.get_ID()) ? -1 : 1;
+                }
+            });
+            //Set activity set for each trace
+            for (Trace T : traces) {
+                T.set_ActivitySet((List<String>) Activity_set.clone());
             }
+
         } catch (Exception e) {
             System.out.println("Error in CsvFileReader !!!");
             e.printStackTrace();

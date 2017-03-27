@@ -214,9 +214,9 @@ public class Main_Frame extends javax.swing.JFrame {
                 strBd.append("\n");
 
                 double[][] matrix = ct.get_Matrix().clone();
-                for (String ac : ct.get_Activity_set().keySet()) {
+                for (String ac : ct.get_Activity_set()) {
                     strBd.append(ac);
-                    for (double cell : matrix[ct.get_Activity_set().get(ac)]) {
+                    for (double cell : matrix[ct.get_Activity_set().indexOf(ac)]) {
                         strBd.append(",");
                         strBd.append(cell);
                     }
